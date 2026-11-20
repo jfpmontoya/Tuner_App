@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guitar Tuner</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="tuner">
+    <h1>Guitar Tuner</h1>
+
+    <section class="start-screen" id="startScreen">
+      <p>Pluck a string and tune your guitar.<br/>This app uses your microphone only &mdash; nothing is recorded.</p>
+      <button id="startBtn" class="btn-primary">Enable microphone</button>
+    </section>
+
+    <section class="tuner-screen hidden" id="tunerScreen">
+      <div class="string-picker" id="stringPicker">
+        <button data-string="0">E<span>2</span></button>
+        <button data-string="1">A<span>2</span></button>
+        <button data-string="2">D<span>3</span></button>
+        <button data-string="3">G<span>3</span></button>
+        <button data-string="4">B<span>3</span></button>
+        <button data-string="5">e<span>4</span></button>
+        <button data-string="auto" class="active">Auto</button>
+      </div>
+
+      <div class="display">
+        <div class="note" id="noteName">–</div>
+        <div class="freq" id="freqReadout">0.0 Hz</div>
+        <div class="cents" id="centsReadout"></div>
+      </div>
+
+      <div class="gauge">
+        <div class="gauge-track">
+          <div class="gauge-zone in-tune"></div>
+          <div class="gauge-needle" id="needle"></div>
+        </div>
+        <div class="gauge-labels">
+          <span>♭ flat</span><span>in tune</span><span>sharp ♯</span>
+        </div>
+      </div>
+
+      <div class="status" id="status">Select a string or use Auto, then pluck</div>
+
+      <div class="reference">
+        <button id="refBtn" class="btn-secondary">Play reference tone</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
