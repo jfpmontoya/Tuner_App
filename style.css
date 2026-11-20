@@ -63,6 +63,36 @@ h1 {
 
 .btn-primary:hover { filter: brightness(1.1); }
 
+/* Tuning picker */
+.tuning-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tuning-picker label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.tuning-picker select {
+  background: #232b34;
+  color: var(--text);
+  border: 1px solid #303a45;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tuning-picker select:hover,
+.tuning-picker select:focus {
+  border-color: var(--accent-dim);
+  outline: none;
+}
+
 /* String picker */
 .string-picker {
   display: flex;

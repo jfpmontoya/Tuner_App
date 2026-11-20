@@ -7,6 +7,7 @@ A simple, dependency-free guitar tuner web app.
 - Microphone-based pitch detection (autocorrelation, no dependencies)
 - Auto mode: detects which string you plucked
 - Manual mode: pick a string to tune against standard pitch (E2 A2 D3 G3 B3 E4)
+- Ukulele support: standard high-G tuning (G4 C4 E4 A4) via the instrument selector
 - Cents deviation gauge with flat/sharp/in-tune feedback
 - Reference tone playback for tuning by ear
 - Works on desktop and mobile browsers, fully offline once loaded

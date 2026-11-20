@@ -1,13 +1,27 @@
 "use strict";
 
-const STRINGS = [
-  { name: "E", octave: 2, freq: 82.41 },
-  { name: "A", octave: 2, freq: 110.00 },
-  { name: "D", octave: 3, freq: 146.83 },
-  { name: "G", octave: 3, freq: 196.00 },
-  { name: "B", octave: 3, freq: 246.94 },
-  { name: "e", octave: 4, freq: 329.63 },
-];
+const TUNINGS = {
+  guitar: {
+    label: "Guitar",
+    strings: [
+      { name: "E", octave: 2, freq: 82.41 },
+      { name: "A", octave: 2, freq: 110.00 },
+      { name: "D", octave: 3, freq: 146.83 },
+      { name: "G", octave: 3, freq: 196.00 },
+      { name: "B", octave: 3, freq: 246.94 },
+      { name: "e", octave: 4, freq: 329.63 },
+    ],
+  },
+  ukulele: {
+    label: "Ukulele",
+    strings: [
+      { name: "G", octave: 4, freq: 392.00 },
+      { name: "C", octave: 4, freq: 261.63 },
+      { name: "E", octave: 4, freq: 329.63 },
+      { name: "A", octave: 4, freq: 440.00 },
+    ],
+  },
+};
 
 const NOTE_NAMES = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
 const IN_TUNE_CENTS = 5;
@@ -17,6 +31,7 @@ const el = {
   tunerScreen: document.getElementById("tunerScreen"),
   startBtn: document.getElementById("startBtn"),
   stringPicker: document.getElementById("stringPicker"),
+  tuningSelect: document.getElementById("tuningSelect"),
   noteName: document.getElementById("noteName"),
   freqReadout: document.getElementById("freqReadout"),
   centsReadout: document.getElementById("centsReadout"),
@@ -31,6 +46,8 @@ let micStream = null;
 let buf = null;
 let running = false;
 let selectedString = "auto";
+let currentTuning = "guitar";
+const strings = () => TUNINGS[currentTuning].strings;
 let osc = null;
 let lastUpdate = 0;
 
@@ -106,13 +123,14 @@ function updateDisplay(freq) {
   let target = null;
 
   if (selectedString !== "auto") {
-    target = STRINGS[Number(selectedString)].freq;
+    target = strings()[Number(selectedString)].freq;
   }
 
   let label, cents;
   if (target !== null) {
+    const s = strings()[Number(selectedString)];
     cents = centsOff(freq, target);
-    label = STRINGS[selectedString].name + STRINGS[selectedString].octave;
+    label = s.name + s.octave;
   } else {
     const info = nearestNoteInfo(freq);
     target = info.target;
@@ -173,10 +191,10 @@ function toggleReference() {
     el.refBtn.textContent = "Play reference tone";
     return;
   }
-  const stringIdx = selectedString !== "auto" ? Number(selectedString) : 5;
+  const stringIdx = selectedString !== "auto" ? Number(selectedString) : strings().length - 1;
   osc = audioCtx.createOscillator();
   osc.type = "sine";
-  osc.frequency.value = STRINGS[stringIdx].freq;
+  osc.frequency.value = strings()[stringIdx].freq;
   osc.connect(audioCtx.destination);
   osc.start();
   el.refBtn.classList.add("playing");
@@ -221,6 +239,31 @@ async function start() {
 
 // --- Events ---
 
+function buildStringPicker() {
+  el.stringPicker.innerHTML = "";
+  strings().forEach((s, i) => {
+    const btn = document.createElement("button");
+    btn.dataset.string = String(i);
+    btn.textContent = s.name;
+    const oct = document.createElement("span");
+    oct.textContent = s.octave;
+    btn.appendChild(oct);
+    el.stringPicker.appendChild(btn);
+  });
+  const autoBtn = document.createElement("button");
+  autoBtn.dataset.string = "auto";
+  autoBtn.className = "active";
+  autoBtn.textContent = "Auto";
+  el.stringPicker.appendChild(autoBtn);
+}
+
+el.tuningSelect.addEventListener("change", (e) => {
+  currentTuning = e.target.value;
+  selectedString = "auto";
+  buildStringPicker();
+  setStatus(TUNINGS[currentTuning].label + " — Auto detect, pluck any string", false);
+});
+
 el.startBtn.addEventListener("click", start);
 
 el.stringPicker.addEventListener("click", (e) => {
@@ -232,7 +275,7 @@ el.stringPicker.addEventListener("click", (e) => {
   setStatus(
     selectedString === "auto"
       ? "Auto detect — pluck any string"
-      : "Tuning " + STRINGS[Number(selectedString)].name + STRINGS[Number(selectedString)].octave,
+      : "Tuning " + strings()[Number(selectedString)].name + strings()[Number(selectedString)].octave,
     false
   );
 });

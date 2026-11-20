@@ -16,15 +16,15 @@
     </section>
 
     <section class="tuner-screen hidden" id="tunerScreen">
-      <div class="string-picker" id="stringPicker">
-        <button data-string="0">E<span>2</span></button>
-        <button data-string="1">A<span>2</span></button>
-        <button data-string="2">D<span>3</span></button>
-        <button data-string="3">G<span>3</span></button>
-        <button data-string="4">B<span>3</span></button>
-        <button data-string="5">e<span>4</span></button>
-        <button data-string="auto" class="active">Auto</button>
+      <div class="tuning-picker">
+        <label for="tuningSelect">Instrument</label>
+        <select id="tuningSelect">
+          <option value="guitar" selected>Guitar &mdash; Standard</option>
+          <option value="ukulele">Ukulele &mdash; Standard (high G)</option>
+        </select>
       </div>
+
+      <div class="string-picker" id="stringPicker"></div>
 
       <div class="display">
         <div class="note" id="noteName">–</div>
